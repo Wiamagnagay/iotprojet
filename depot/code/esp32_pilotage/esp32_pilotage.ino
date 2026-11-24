@@ -32,9 +32,9 @@
 #include <PubSubClient.h>
 
 // ---------- A MODIFIER ----------
-const char *ssid        = "iot";
-const char *password    = "iotisis;";
-const char *mqtt_server = "172.18.32.44";   // IP de la Raspberry
+const char *ssid        = "xxxx";
+const char *password    = "xxxx";
+const char *mqtt_server = "192.168.X.X";   // IP de la Raspberry
 
 #define MQTT_CLIENT_ID   "ESP32_Pilotage_SEB"   // different sur chaque ESP32
 #define TOPIC_LED_CMD    "seb/led/cmd"

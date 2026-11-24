@@ -1,0 +1,852 @@
+[
+  {
+    "id": "seb0000000000001",
+    "type": "tab",
+    "label": "Suivi cardiaque SEB",
+    "disabled": false,
+    "info": "Noeud Principal -> MQTT -> Node-RED (dashboard + alarme) -> Noeud de pilotage",
+    "env": []
+  },
+  {
+    "id": "seb00000000broker",
+    "type": "mqtt-broker",
+    "name": "Mosquitto (Raspberry)",
+    "broker": "localhost",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "4",
+    "keepalive": "60",
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "795bf448bb83b6e8",
+    "type": "ui-base",
+    "name": "My Dashboard",
+    "path": "/dashboard",
+    "appIcon": "",
+    "includeClientData": true,
+    "acceptsClientConfig": [
+      "ui-notification",
+      "ui-control"
+    ],
+    "showPathInSidebar": false,
+    "headerContent": "page",
+    "navigationStyle": "default",
+    "titleBarStyle": "default",
+    "showReconnectNotification": true,
+    "notificationDisplayTime": 1,
+    "showDisconnectNotification": true,
+    "allowInstall": false
+  },
+  {
+    "id": "c20cc05d4cc85dfb",
+    "type": "ui-theme",
+    "name": "Default Theme",
+    "colors": {
+      "surface": "#ffffff",
+      "primary": "#0094CE",
+      "bgPage": "#eeeeee",
+      "groupBg": "#ffffff",
+      "groupOutline": "#cccccc"
+    },
+    "sizes": {
+      "density": "default",
+      "pagePadding": "12px",
+      "groupGap": "12px",
+      "groupBorderRadius": "4px",
+      "widgetGap": "12px"
+    }
+  },
+  {
+    "id": "seb0000000000page",
+    "type": "ui-page",
+    "name": "Suivi cardiaque",
+    "ui": "795bf448bb83b6e8",
+    "path": "/cardio-seb",
+    "icon": "heart-pulse",
+    "layout": "grid",
+    "theme": "c20cc05d4cc85dfb",
+    "breakpoints": [
+      {
+        "name": "Default",
+        "px": "0",
+        "cols": "3"
+      },
+      {
+        "name": "Tablet",
+        "px": "576",
+        "cols": "6"
+      },
+      {
+        "name": "Small Desktop",
+        "px": "768",
+        "cols": "9"
+      },
+      {
+        "name": "Desktop",
+        "px": "1024",
+        "cols": "12"
+      }
+    ],
+    "order": 2,
+    "className": "",
+    "visible": "true",
+    "disabled": "false"
+  },
+  {
+    "id": "seb00000000grpmes",
+    "type": "ui-group",
+    "name": "Mesures du capteur",
+    "page": "seb0000000000page",
+    "width": 6,
+    "height": 1,
+    "order": 1,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "seb00000000grpala",
+    "type": "ui-group",
+    "name": "Alarme",
+    "page": "seb0000000000page",
+    "width": 3,
+    "height": 1,
+    "order": 2,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "seb00000000grppil",
+    "type": "ui-group",
+    "name": "Noeud de pilotage",
+    "page": "seb0000000000page",
+    "width": 3,
+    "height": 1,
+    "order": 3,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "seb0000000000101",
+    "type": "comment",
+    "z": "seb0000000000001",
+    "name": "1) Donnees du capteur (Noeud Principal) -> graphiques",
+    "info": "Topic seb/patient/donnees : {code, message, bpm, spo2}",
+    "x": 200,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000102",
+    "type": "ui-chart",
+    "z": "seb0000000000001",
+    "group": "seb00000000grpmes",
+    "name": "Frequence cardiaque (bpm)",
+    "label": "Frequence cardiaque (bpm)",
+    "order": 1,
+    "chartType": "line",
+    "category": "topic",
+    "categoryType": "msg",
+    "xAxisLabel": "",
+    "xAxisProperty": "",
+    "xAxisPropertyType": "timestamp",
+    "xAxisType": "time",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "xmin": "",
+    "xmax": "",
+    "yAxisLabel": "bpm",
+    "yAxisProperty": "payload",
+    "yAxisPropertyType": "msg",
+    "ymin": "",
+    "ymax": "",
+    "bins": 10,
+    "action": "append",
+    "stackSeries": false,
+    "pointShape": "circle",
+    "pointRadius": 4,
+    "showLegend": true,
+    "removeOlder": 10,
+    "removeOlderUnit": "60",
+    "removeOlderPoints": "",
+    "colors": [
+      "#d62728",
+      "#0095ff",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": 6,
+    "height": 6,
+    "className": "",
+    "interpolation": "linear",
+    "x": 800,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000103",
+    "type": "ui-chart",
+    "z": "seb0000000000001",
+    "group": "seb00000000grpmes",
+    "name": "SpO2 (%)",
+    "label": "SpO2 (%)",
+    "order": 2,
+    "chartType": "line",
+    "category": "topic",
+    "categoryType": "msg",
+    "xAxisLabel": "",
+    "xAxisProperty": "",
+    "xAxisPropertyType": "timestamp",
+    "xAxisType": "time",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "xmin": "",
+    "xmax": "",
+    "yAxisLabel": "%",
+    "yAxisProperty": "payload",
+    "yAxisPropertyType": "msg",
+    "ymin": "70",
+    "ymax": "100",
+    "bins": 10,
+    "action": "append",
+    "stackSeries": false,
+    "pointShape": "circle",
+    "pointRadius": 4,
+    "showLegend": true,
+    "removeOlder": 10,
+    "removeOlderUnit": "60",
+    "removeOlderPoints": "",
+    "colors": [
+      "#0095ff",
+      "#0095ff",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": 6,
+    "height": 6,
+    "className": "",
+    "interpolation": "linear",
+    "x": 780,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000104",
+    "type": "ui-text",
+    "z": "seb0000000000001",
+    "group": "seb00000000grpmes",
+    "order": 3,
+    "width": 0,
+    "height": 0,
+    "name": "Etat du capteur",
+    "label": "Etat du capteur",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "Helvetica",
+    "fontSize": 16,
+    "color": "#717171",
+    "wrapText": false,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 780,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000105",
+    "type": "function",
+    "z": "seb0000000000001",
+    "name": "Preparer affichage",
+    "func": "// Prepare les donnees du Noeud Principal pour le dashboard\n// Sortie 1 : graphique BPM / Sortie 2 : graphique SpO2 / Sortie 3 : etat du capteur\nconst d = msg.payload;\n\nconst bpm  = d.bpm  > 0 ? { payload: d.bpm,  topic: \"BPM\" }  : null;\nconst spo2 = d.spo2 > 0 ? { payload: d.spo2, topic: \"SpO2\" } : null;\nconst etat = { payload: d.message };\n\nnode.status({\n    fill: d.code === 0 ? \"green\" : \"yellow\",\n    shape: \"dot\",\n    text: (d.bpm || \"--\") + \" bpm | SpO2 \" + (d.spo2 || \"--\") + \" %\"\n});\n\nreturn [bpm, spo2, etat];",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "wires": [
+      [
+        "seb0000000000102"
+      ],
+      [
+        "seb0000000000103"
+      ],
+      [
+        "seb0000000000104"
+      ]
+    ],
+    "outputLabels": [
+      "BPM",
+      "SpO2",
+      "Etat"
+    ],
+    "x": 500,
+    "y": 140
+  },
+  {
+    "id": "seb0000000000106",
+    "type": "mqtt out",
+    "z": "seb0000000000001",
+    "name": "",
+    "topic": "seb/alarme/cmd",
+    "qos": "0",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "seb00000000broker",
+    "x": 820,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000107",
+    "type": "debug",
+    "z": "seb0000000000001",
+    "name": "Ordre alarme -> LED",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 830,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000108",
+    "type": "ui-text",
+    "z": "seb0000000000001",
+    "group": "seb00000000grpala",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "name": "Etat de l'alarme",
+    "label": "Alarme",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "Helvetica",
+    "fontSize": 16,
+    "color": "#717171",
+    "wrapText": false,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 780,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000109",
+    "type": "ui-notification",
+    "z": "seb0000000000001",
+    "ui": "795bf448bb83b6e8",
+    "position": "top right",
+    "colorDefault": false,
+    "color": "#d32f2f",
+    "displayTime": "5",
+    "showCountdown": true,
+    "outputs": 1,
+    "allowDismiss": true,
+    "dismissText": "Fermer",
+    "allowConfirm": false,
+    "confirmText": "Confirmer",
+    "raw": false,
+    "className": "",
+    "name": "Popup alarme",
+    "wires": [
+      []
+    ],
+    "x": 790,
+    "y": 420
+  },
+  {
+    "id": "seb0000000000110",
+    "type": "function",
+    "z": "seb0000000000001",
+    "name": "Logique alarme",
+    "func": "// LOGIQUE D'ALARME\n// Entrees :\n//  - seb/patient/donnees : donnees du capteur (Noeud Principal)\n//  - seb/bouton          : etat du bouton (Noeud de pilotage)\n//\n// Etats :\n//  NORMAL    -> ALARME    : le pouls sort des seuils\n//  ALARME    -> ACQUITTEE : le bouton est appuye (le soignant a vu l'alarme)\n//  ALARME / ACQUITTEE -> NORMAL : le pouls revient dans les seuils\n// Apres un acquittement, l'alarme ne repart pas tant que le pouls\n// n'est pas redevenu normal puis anormal.\n\nconst BPM_MIN = 50;    // en dessous : frequence trop basse\nconst BPM_MAX = 100;   // au-dessus : frequence trop haute\n\nconst precedent = context.get(\"etat\") || \"NORMAL\";\nlet etat = precedent;\n\nif (msg.topic === \"seb/bouton\") {\n    // Le bouton n'agit que si une alarme est en cours\n    if (msg.payload === \"appuye\" && precedent === \"ALARME\") {\n        etat = \"ACQUITTEE\";\n    }\n}\nelse {\n    const bpm = msg.payload.bpm;\n    if (!(bpm > 0)) {\n        return null;   // pas de mesure valide (doigt retire...) : on ne change rien\n    }\n    const anormal = (bpm > BPM_MAX || bpm < BPM_MIN);\n    if (!anormal)                  etat = \"NORMAL\";\n    else if (precedent === \"NORMAL\") etat = \"ALARME\";\n}\n\nif (etat === precedent) {\n    return null;   // rien n'a change\n}\ncontext.set(\"etat\", etat);\n\nconst textes = {\n    NORMAL:    \"Pas d'alarme\",\n    ALARME:    \"ALARME : frequence cardiaque anormale !\",\n    ACQUITTEE: \"Alarme acquittee par le bouton\"\n};\n\nnode.status({\n    fill: etat === \"ALARME\" ? \"red\" : (etat === \"ACQUITTEE\" ? \"yellow\" : \"green\"),\n    shape: \"dot\",\n    text: etat\n});\n\n// Sortie 1 : ordre pour la LED du Noeud de pilotage\n// Sortie 2 : texte d'etat sur le dashboard\n// Sortie 3 : notification sur le dashboard (seulement quand l'alarme se declenche)\nconst versLED   = { payload: etat === \"ALARME\" ? \"ON\" : \"OFF\" };\nconst versTexte = { payload: textes[etat] };\nconst versNotif = (etat === \"ALARME\") ? { payload: textes.ALARME } : null;\n\nreturn [versLED, versTexte, versNotif];",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "wires": [
+      [
+        "seb0000000000106",
+        "seb0000000000107"
+      ],
+      [
+        "seb0000000000108"
+      ],
+      [
+        "seb0000000000109"
+      ]
+    ],
+    "outputLabels": [
+      "LED (ON/OFF)",
+      "Texte alarme",
+      "Notification"
+    ],
+    "x": 500,
+    "y": 380
+  },
+  {
+    "id": "seb0000000000111",
+    "type": "mqtt out",
+    "z": "seb0000000000001",
+    "name": "",
+    "topic": "seb/led_verte/cmd",
+    "qos": "0",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "seb00000000broker",
+    "x": 820,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000112",
+    "type": "function",
+    "z": "seb0000000000001",
+    "name": "LED verte (pouls normal)",
+    "func": "// LED verte du Noeud de pilotage : allumee quand le pouls est normal\n// (meme seuils que la logique d'alarme, et pouls different de 0)\nconst BPM_MIN = 50;\nconst BPM_MAX = 100;\n\nconst bpm = msg.payload.bpm;\nconst normal = (bpm > 0 && bpm >= BPM_MIN && bpm <= BPM_MAX);\nconst etat = normal ? \"ON\" : \"OFF\";\n\n// On n'envoie un ordre que quand l'etat change\nif (etat === context.get(\"etat\")) {\n    return null;\n}\ncontext.set(\"etat\", etat);\n\nnode.status({ fill: normal ? \"green\" : \"grey\", shape: \"dot\", text: \"LED verte \" + etat });\nreturn { payload: etat };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "wires": [
+      [
+        "seb0000000000111"
+      ]
+    ],
+    "x": 500,
+    "y": 220
+  },
+  {
+    "id": "seb0000000000113",
+    "type": "debug",
+    "z": "seb0000000000001",
+    "name": "Donnees patient",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 470,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000114",
+    "type": "mqtt in",
+    "z": "seb0000000000001",
+    "name": "",
+    "topic": "seb/patient/donnees",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "seb00000000broker",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [
+      [
+        "seb0000000000113",
+        "seb0000000000105",
+        "seb0000000000110",
+        "seb0000000000112"
+      ]
+    ],
+    "x": 180,
+    "y": 140
+  },
+  {
+    "id": "seb0000000000115",
+    "type": "comment",
+    "z": "seb0000000000001",
+    "name": "2) Logique d'alarme (capteur + bouton)",
+    "info": "",
+    "x": 200,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000116",
+    "type": "inject",
+    "z": "seb0000000000001",
+    "name": "TEST : pouls eleve (130 bpm)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.5,
+    "topic": "seb/patient/donnees",
+    "payload": "{\"code\":6,\"message\":\"Alerte : frequence cardiaque trop haute\",\"bpm\":130,\"spo2\":97}",
+    "payloadType": "json",
+    "wires": [
+      [
+        "seb0000000000105",
+        "seb0000000000110",
+        "seb0000000000112"
+      ]
+    ],
+    "x": 180,
+    "y": 340
+  },
+  {
+    "id": "seb0000000000117",
+    "type": "inject",
+    "z": "seb0000000000001",
+    "name": "TEST : pouls bas (40 bpm)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.5,
+    "topic": "seb/patient/donnees",
+    "payload": "{\"code\":5,\"message\":\"Alerte : frequence cardiaque trop basse\",\"bpm\":40,\"spo2\":97}",
+    "payloadType": "json",
+    "wires": [
+      [
+        "seb0000000000105",
+        "seb0000000000110",
+        "seb0000000000112"
+      ]
+    ],
+    "x": 180,
+    "y": 380
+  },
+  {
+    "id": "seb0000000000118",
+    "type": "inject",
+    "z": "seb0000000000001",
+    "name": "TEST : pouls normal (72 bpm)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.5,
+    "topic": "seb/patient/donnees",
+    "payload": "{\"code\":0,\"message\":\"Fonctionnement nominal : acquisition capteur en cours\",\"bpm\":72,\"spo2\":98}",
+    "payloadType": "json",
+    "wires": [
+      [
+        "seb0000000000105",
+        "seb0000000000110",
+        "seb0000000000112"
+      ]
+    ],
+    "x": 180,
+    "y": 420
+  },
+  {
+    "id": "seb0000000000119",
+    "type": "inject",
+    "z": "seb0000000000001",
+    "name": "TEST : bouton appuye",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.5,
+    "topic": "seb/bouton",
+    "payload": "appuye",
+    "payloadType": "str",
+    "wires": [
+      [
+        "seb0000000000110"
+      ]
+    ],
+    "x": 180,
+    "y": 460
+  },
+  {
+    "id": "seb0000000000120",
+    "type": "inject",
+    "z": "seb0000000000001",
+    "name": "Init : pas d'alarme",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.5,
+    "topic": "",
+    "payload": "Pas d'alarme",
+    "payloadType": "str",
+    "wires": [
+      [
+        "seb0000000000108"
+      ]
+    ],
+    "x": 560,
+    "y": 460
+  },
+  {
+    "id": "seb0000000000121",
+    "type": "comment",
+    "z": "seb0000000000001",
+    "name": "3) Noeud de pilotage : etat du bouton et commande de la LED",
+    "info": "",
+    "x": 200,
+    "y": 520,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000122",
+    "type": "ui-switch",
+    "z": "seb0000000000001",
+    "name": "Etat du bouton",
+    "label": "Bouton appuye",
+    "group": "seb00000000grppil",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "passthru": false,
+    "decouple": false,
+    "topic": "topic",
+    "topicType": "msg",
+    "style": "",
+    "className": "",
+    "layout": "row-spread",
+    "clickableArea": "switch",
+    "onvalue": "true",
+    "onvalueType": "bool",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "false",
+    "offvalueType": "bool",
+    "officon": "",
+    "offcolor": "",
+    "wires": [
+      []
+    ],
+    "x": 780,
+    "y": 580
+  },
+  {
+    "id": "seb0000000000123",
+    "type": "function",
+    "z": "seb0000000000001",
+    "name": "Bouton -> interrupteur",
+    "func": "// \"appuye\" -> interrupteur allume / \"relache\" -> eteint\nmsg.payload = (msg.payload === \"appuye\");\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "wires": [
+      [
+        "seb0000000000122"
+      ]
+    ],
+    "x": 500,
+    "y": 580
+  },
+  {
+    "id": "seb0000000000124",
+    "type": "debug",
+    "z": "seb0000000000001",
+    "name": "Etat bouton",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 470,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000125",
+    "type": "mqtt in",
+    "z": "seb0000000000001",
+    "name": "",
+    "topic": "seb/bouton",
+    "qos": "0",
+    "datatype": "utf8",
+    "broker": "seb00000000broker",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "wires": [
+      [
+        "seb0000000000123",
+        "seb0000000000124",
+        "seb0000000000110"
+      ]
+    ],
+    "x": 160,
+    "y": 580
+  },
+  {
+    "id": "seb0000000000126",
+    "type": "mqtt out",
+    "z": "seb0000000000001",
+    "name": "",
+    "topic": "seb/led/cmd",
+    "qos": "0",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "seb00000000broker",
+    "x": 780,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "seb0000000000127",
+    "type": "ui-switch",
+    "z": "seb0000000000001",
+    "name": "Commande LED",
+    "label": "LED",
+    "group": "seb00000000grppil",
+    "order": 2,
+    "width": 0,
+    "height": 0,
+    "passthru": false,
+    "decouple": false,
+    "topic": "topic",
+    "topicType": "msg",
+    "style": "",
+    "className": "",
+    "layout": "row-spread",
+    "clickableArea": "switch",
+    "onvalue": "on",
+    "onvalueType": "str",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "off",
+    "offvalueType": "str",
+    "officon": "",
+    "offcolor": "",
+    "wires": [
+      [
+        "seb0000000000126"
+      ]
+    ],
+    "x": 500,
+    "y": 680
+  }
+]
