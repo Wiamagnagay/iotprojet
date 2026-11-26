@@ -5,6 +5,8 @@
 
 Notre prototype mesure le **pouls** et la **saturation en oxygène** d'une personne âgée. Il affiche les mesures en temps réel sur un **dashboard Node-RED** et déclenche une **alarme** (dashboard, LED, buzzer) quand le pouls sort de la plage normale. Un soignant acquitte l'alarme avec un bouton. Un ESP32 de **diagnostic**, relié en I2C, affiche l'état de fonctionnement du système.
 
+<img src="images/photo_prototype.jpg" alt="Photo du prototype" width="420">
+
 ![Architecture du projet](images/architecture.png)
 
 ## Pages du wiki
@@ -18,21 +20,23 @@ Notre prototype mesure le **pouls** et la **saturation en oxygène** d'une perso
 
 ## Contenu du dépôt
 
+Code source et flow Node-RED : dossier [`depot/`](https://github.com/Wiamagnagay/iotprojet/tree/main/depot) du dépôt.
+
 ```text
-code/
+depot/code/
   esp32_principal/esp32_principal.ino      Nœud Principal (capteur + esclave I2C + MQTT, FreeRTOS)
   esp32_diagnostic/esp32_diagnostic.ino    Nœud de diagnostic (maître I2C, moniteur série)
   esp32_pilotage/esp32_pilotage.ino        Nœud de pilotage (LED, LED verte, buzzer, bouton)
   outils/diagnostic_capteur/               outil : trouve sur quelles broches répond le capteur
-node-red/
+depot/node-red/
   flow_nodered_seb.json                    flow Node-RED (à importer)
-images/                                    schémas, captures, photos
+depot/images/                              schémas, captures, photos
 ```
 
 ## Équipe
 
-| Membre | Partie |
-|---|---|
-| Wiam Agnagay | Raspberry Pi : Mosquitto, Node-RED, dashboard |
-| *(à compléter)* | ESP32 (Arduino IDE) |
-| *(à compléter)* | ESP32 (Arduino IDE) |
+| Membre |
+|---|
+| Wiam Agnagay |
+| Aya Fettah |
+| *(à compléter)* |

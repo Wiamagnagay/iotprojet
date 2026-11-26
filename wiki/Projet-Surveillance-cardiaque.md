@@ -10,9 +10,9 @@ Un soignant peut **acquitter l'alarme avec un bouton**. Une **LED verte** reste 
 
 Un troisième ESP32, relié en **I2C**, joue le rôle de **« valise de diagnostic »** : il affiche dans le moniteur série l'état de fonctionnement du système (capteur, WiFi, broker MQTT…).
 
-> 📷 **Photo du prototype à ajouter ici** : les 3 ESP32, le capteur, les LED, le buzzer et la Raspberry Pi.
-> Enregistre-la sous `images/photo_prototype.jpg`, puis remplace ce bloc par :
-> `![Prototype](images/photo_prototype.jpg)`
+<img src="images/photo_prototype.jpg" alt="Photo du prototype" width="480">
+
+*Le prototype : en haut, le Nœud de pilotage (LED d'alarme rouge, LED verte, buzzer, bouton) ; en bas, le Nœud Principal et le Nœud de diagnostic reliés en I2C ; à gauche, le capteur cardiaque DFRobot posé au bout du doigt.*
 
 ![Dashboard Node-RED pendant une alarme](images/dashboard.png)
 *Le dashboard pendant un test : courbes du pouls et de la SpO2, alarme déclenchée (pouls > 100 bpm).*
@@ -213,7 +213,7 @@ Il **publie** `appuye` ou `relache` sur `seb/bouton` à chaque changement d'éta
 
 ![Flow Node-RED](images/flow_node_red.png)
 
-Le flow (`node-red/flow_nodered_seb.json`) comporte 3 parties :
+Le flow ([`depot/node-red/flow_nodered_seb.json`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/node-red/flow_nodered_seb.json)) comporte 3 parties :
 
 1. **Données du capteur → graphiques.** Le nœud `mqtt in` reçoit `seb/patient/donnees` (JSON). La fonction *Préparer affichage* envoie le pouls vers un graphique, la SpO2 vers un autre et le message d'état vers un texte. La fonction *LED verte (pouls normal)* envoie `ON`/`OFF` sur `seb/led_verte/cmd`.
 2. **Logique d'alarme.** La fonction *Logique alarme* reçoit à la fois les données du capteur **et l'état du bouton**. Elle gère 3 états :
@@ -237,7 +237,15 @@ Le flow (`node-red/flow_nodered_seb.json`) comporte 3 parties :
 
 ## 6. Explications du code (parties essentielles)
 
-Le code complet se trouve dans le dossier [`code/`](../tree/main/code) du dépôt. Voici seulement les parties clés.
+Le code complet se trouve dans le dossier [`depot/code/`](https://github.com/Wiamagnagay/iotprojet/tree/main/depot/code) du dépôt, et le flow Node-RED dans [`depot/node-red/`](https://github.com/Wiamagnagay/iotprojet/tree/main/depot/node-red). Voici seulement les parties clés.
+
+| Fichier | ESP32 |
+|---|---|
+| [`esp32_principal.ino`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/code/esp32_principal/esp32_principal.ino) | Nœud Principal (ESP32 n°2) |
+| [`esp32_diagnostic.ino`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/code/esp32_diagnostic/esp32_diagnostic.ino) | Nœud de diagnostic (ESP32 n°1) |
+| [`esp32_pilotage.ino`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/code/esp32_pilotage/esp32_pilotage.ino) | Nœud de pilotage (ESP32 n°3) |
+| [`diagnostic_capteur.ino`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/code/outils/diagnostic_capteur/diagnostic_capteur.ino) | outil : trouve sur quelles broches répond le capteur |
+| [`flow_nodered_seb.json`](https://github.com/Wiamagnagay/iotprojet/blob/main/depot/node-red/flow_nodered_seb.json) | flow Node-RED à importer |
 
 ### Nœud Principal : esclave I2C + 2e bus pour le capteur
 
@@ -307,7 +315,7 @@ if (msg.topic === "seb/bouton") {
 
 1. **Raspberry Pi** : installer Mosquitto (avec accès distant), Node-RED et Dashboard 2.0 (voir [Prérequis](#2-prérequis)).
 2. **Node-RED** :
-   - menu ☰ → **Importer** → choisir `node-red/flow_nodered_seb.json` → **Importer** → **Déployer** ;
+   - menu ☰ → **Importer** → choisir `depot/node-red/flow_nodered_seb.json` → **Importer** → **Déployer** ;
    - vérifier que les nœuds MQTT affichent **« Connecté »**.
 3. **ESP32** : dans `esp32_principal.ino` et `esp32_pilotage.ino`, renseigner le WiFi et l'IP de la Raspberry :
    ```cpp
@@ -347,7 +355,7 @@ if (msg.topic === "seb/bouton") {
 
 | Problème | Cause | Solution |
 |---|---|---|
-| « Capteur cardiaque introuvable » dans le moniteur série | les fils D/T et C/R du capteur étaient branchés dans les rangées de breadboard du **bus IO21/IO22** (celui du Nœud de diagnostic) au lieu de IO25/IO26 | sketch d'aide `code/outils/diagnostic_capteur` qui teste toutes les broches, puis branchement direct du capteur sur D2/D3 |
+| « Capteur cardiaque introuvable » dans le moniteur série | les fils D/T et C/R du capteur étaient branchés dans les rangées de breadboard du **bus IO21/IO22** (celui du Nœud de diagnostic) au lieu de IO25/IO26 | sketch d'aide [`depot/code/outils/diagnostic_capteur`](https://github.com/Wiamagnagay/iotprojet/tree/main/depot/code/outils/diagnostic_capteur) qui teste toutes les broches, puis branchement direct du capteur sur D2/D3 |
 | Le capteur I2C ne peut pas partager le bus 0 | le Nœud Principal est **esclave** sur le bus 0 ; il ne peut pas être maître du capteur sur le même bus | utilisation du 2e contrôleur I2C de l'ESP32 (`TwoWire(1)`) |
 | Erreur de compilation `DFRobot_RTU.h: No such file` | la bibliothèque du capteur dépend d'une 2e bibliothèque | installer aussi **DFRobot_RTU** |
 | Valeurs à `-1` | pas de doigt, ou mesure en cours (mise à jour toutes les ~4 s) | poser le doigt sans appuyer et sans bouger ; code d'état 4 dédié |

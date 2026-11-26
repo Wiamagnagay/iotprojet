@@ -51,7 +51,7 @@ Bibliothèques nécessaires : **DFRobot_BloodOxygen_S** et **DFRobot_RTU**.
 ### 4. Problème : « Capteur cardiaque introuvable »
 - **Symptôme** : le moniteur série du Slave affichait en boucle `Capteur cardiaque introuvable`, alors que la liaison avec le Master fonctionnait.
 - **Cause** : les fils D/T (vert) et C/R (bleu) du capteur arrivaient dans les rangées de breadboard où passait aussi la liaison **IO21/IO22**. Le capteur se retrouvait sur le bus du Master, et non sur IO25/IO26.
-- **Diagnostic** : nous avons écrit un petit programme, `code/outils/diagnostic_capteur`, qui cherche l'adresse `0x57` sur toutes les paires de broches de l'ESP32. Il indique où le capteur répond vraiment.
+- **Diagnostic** : nous avons écrit un petit programme, [`depot/code/outils/diagnostic_capteur`](https://github.com/Wiamagnagay/iotprojet/tree/main/depot/code/outils/diagnostic_capteur), qui cherche l'adresse `0x57` sur toutes les paires de broches de l'ESP32. Il indique où le capteur répond vraiment.
 - **Solution** : brancher les fils du capteur directement dans les connecteurs **D2/D3** de l'ESP32 Slave.
 
 ---
